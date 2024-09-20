@@ -1,30 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Classification Result</title>
 </head>
+
 <body>
     <h1>Prediction Result</h1>
     <p>Deficiency Type: {{ deficiency_type }}</p>
-    <h2>Prediction Probabilities:</h2>
-    <table border="1">
-        <tr>
-            <th>Class Name</th>
-            <th>Probability</th>
-        </tr>
-        {% for class_name, prob in prediction_table_data %}
-        <tr>
-            <td>{{ class_name }}</td>
-            <td>{{ prob }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+    <p>Accuracy: {{ accuracy }}</p>
     <h2>Uploaded Image:</h2>
     <img src="data:image/jpeg;base64,{{ img_data }}" alt="Uploaded Image">
     <br>
     <a href="/">Go Back</a>
 </body>
-</html>
 
+</html>
