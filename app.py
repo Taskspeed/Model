@@ -4,8 +4,10 @@ import tensorflow as tf
 from PIL import Image
 import io
 import base64
+from flask_cors import CORS 
 
 app = Flask(__name__)
+CORS(app) 
 
 # Route for the detection app
 # @app.route('/')
