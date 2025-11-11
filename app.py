@@ -95,7 +95,42 @@ def predict_deficiency_monitor():
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@app.route("/resultDetection/batch", methods=["POST"])
+def predict_batch_deficiency_detection():
+    if "files" not in request.files:
+        return jsonify({"error": "No files in the request"}), 400
 
+    files = request.files.getlist("files")
+    
+    if len(files) == 0:
+        return jsonify({"error": "No files selected"}), 400
+
+    try:
+        predictions = []
+        interpreter = load_tflite_model_detection()
+        
+        for file in files:
+            image = Image.open(io.BytesIO(file.read()))
+            class_index, prediction_probabilities = predict_with_tflite(image, interpreter)
+            deficiency_type = get_deficiency_detection(class_index)
+
+            accuracy = prediction_probabilities[class_index] * 100
+            
+            if accuracy < 80.0 or class_index == 1:
+                prediction_data = {'deficiency_type': "Invalid", 'accuracy': None}
+            else:
+                prediction_data = {
+                    'deficiency_type': deficiency_type,
+                    'accuracy': f"{accuracy:.2f}%"
+                }
+            
+            predictions.append(prediction_data)
+
+        return jsonify({"predictions": predictions})
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 # Load TFLite model and initialize interpreter for Detection
 def load_tflite_model_detection():
@@ -158,4 +193,5 @@ def get_deficiency_monitor(class_index):
 
 
 if __name__ == "__main__":
-    app.run(host='192.168.100.105', debug=True)
+    app.run(host='192.168.100.105',port=8000, debug=True)
+    #  app.run()
