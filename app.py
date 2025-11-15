@@ -134,7 +134,7 @@ def predict_batch_deficiency_detection():
 
 # Load TFLite model and initialize interpreter for Detection
 def load_tflite_model_detection():
-    interpreter = tf.lite.Interpreter(model_path="Detect.tflite")
+    interpreter = tf.lite.Interpreter(model_path=".tflite")
     interpreter.allocate_tensors()
     return interpreter
 
